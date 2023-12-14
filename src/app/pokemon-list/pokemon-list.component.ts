@@ -1,13 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PokemonService } from '../services/pokemon.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-
-interface PokemonCard {
-  id: string;
-  name: string;
-  imageUrl: string;
-  selected: boolean;
-}
+import { Deck } from '../model/deck.model';
+import { Card } from '../model/card.model';
+import { DeckService } from '../services/deck.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -16,18 +12,35 @@ interface PokemonCard {
 })
 export class PokemonListComponent implements OnInit {
   cards: any;
-  minSelectedCards = 24;
-  allCards: PokemonCard[] = []; 
-  selectedCards: PokemonCard[] = [];
+  decks: Deck[] = [];
+  minSelectedCards = 4;
+  allCards: Card[] = []; 
+  selectedCards: Card[] = [];
   animationStates: { [key: string]: string } = {};
+  decks$: Observable<Deck[]> = this.deckService.getDecks();
   
   constructor(
     private pokemonService: PokemonService,
+    private deckService: DeckService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.getPokemonCards();
+    this.loadDecks();
+    this.decks$ = this.deckService.getDecks();
+  }
+
+  loadDecks(): void {
+    //this.decks = this.deckService.getDecks();
+    this.deckService.getDecks().subscribe(
+      decks => {
+        this.decks = decks;
+      },
+      error => {
+        console.error('Erro ao carregar decks:', error);
+      }
+    );
   }
 
   getPokemonCards(): void {
@@ -55,11 +68,24 @@ export class PokemonListComponent implements OnInit {
   }
 
   createNewList() {
-    if (this.selectedCards.length >= 24 && this.selectedCards.length <= 60) {
-      console.log('Nova lista criada:', this.selectedCards);
+    if (this.selectedCards.length >= 4 && this.selectedCards.length <= 60) {
+      this.saveDeck(this.selectedCards)
+        .subscribe(() => {
+          console.log('Nova lista criada:', this.selectedCards);
+          this.loadDecks();
+        });
     } else {
-      console.log('Selecione entre 24 e 60 cards.');
+      console.log('Selecione entre 4 e 60 cartas.');
     }
   }
-
+  
+  saveDeck(cartasEscolhidas: any): Observable<void> {
+    const deck: Deck = {
+      id: Date.now().toString(),
+      name: 'Meu Deck', // Pode personalizar o nome conforme necessário
+      cards: cartasEscolhidas, // Adicione a lógica para obter os IDs das cartas no deck
+    };
+  
+    return this.deckService.saveDeck(deck);
+  }
 }

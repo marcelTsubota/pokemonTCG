@@ -13,4 +13,5 @@ export class PokemonService {
   getCards(): Observable<any> {
     return this.http.get<any>(this.url);
   }
+  
 }

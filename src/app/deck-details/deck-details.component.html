@@ -1,0 +1,37 @@
+
+<div class="header">
+  <button mat-raised-button color="primary" routerLink="/pokemon-list">
+    <mat-icon>arrow_back</mat-icon>
+    <div>Voltar para Lista de Pokémon</div>
+  </button>
+
+  <button mat-raised-button color="primary" (click)="openDialog()" class="ml-2">
+    Mostrar lista de cartas
+  </button>
+
+  <button mat-raised-button color="warn" (click)="deleteDeck()" class="ml-2">
+    Excluir Deck
+  </button>
+</div>
+
+
+<div *ngIf="deck" class="deck-details-container">
+  <h2>Detalhes do Deck</h2>
+  <h3>{{ deck.name }}</h3>
+
+  <div class="flex flex-wrap shadow-md p-4">
+    <mat-card *ngFor="let cardId of deck.cards" class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2">
+      <img [src]="getCardDetails(cardId).imageUrl" alt="{{ getCardDetails(cardId).name }} Image" class="w-full object-cover">
+
+      <mat-card-content>
+        <mat-card-title class="text-lg font-bold">{{ getCardDetails(cardId).name }}</mat-card-title>
+        <div class="text-base">Supertype: {{ getCardDetails(cardId).supertype }}</div>
+        <div *ngFor="let cardType of getCardDetails(cardId)?.types">Type: {{ cardType }}</div>
+      </mat-card-content>
+
+      <button mat-raised-button color="warn" (click)="deleteCard(cardId.id)">
+        Excluir Carta
+      </button>
+    </mat-card>
+  </div>
+</div>

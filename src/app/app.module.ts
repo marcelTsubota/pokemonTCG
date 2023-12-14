@@ -13,7 +13,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { CardListComponent } from './card-list/card-list.component';
+import { DeckDetailsComponent } from './deck-details/deck-details.component';
+import { LayoutComponent } from './layout/layout.component';
+import { AddCardDialogComponent } from './add-card-dialog/add-card-dialog.component';
 
 
 @NgModule({
@@ -22,6 +27,9 @@ import { CardListComponent } from './card-list/card-list.component';
     PokemonListComponent,
     PokemonCardComponent,
     CardListComponent,
+    DeckDetailsComponent,
+    LayoutComponent,
+    AddCardDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +41,8 @@ import { CardListComponent } from './card-list/card-list.component';
     MatChipsModule,
     AppRoutingModule,
     RouterModule,
+    MatSnackBarModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

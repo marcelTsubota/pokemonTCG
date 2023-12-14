@@ -1,0 +1,16 @@
+<h2>Adicionar Carta ao Deck</h2>
+
+<div class="flex flex-wrap shadow-md p-4">
+  <mat-card *ngFor="let card of availableCards"
+            class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2">
+    <img [src]="card.imageUrl" alt="{{ card.name }} Image" class="w-full object-cover">
+    <mat-card-content>
+      <mat-card-title class="text-lg font-bold">{{ card.name }}</mat-card-title>
+      <!-- <div class="text-base">Supertype: {{ card.supertype }}</div>
+      <div *ngFor="let cardType of card.types">Type: {{ cardType }}</div> -->
+    </mat-card-content>
+    <button mat-button color="primary" (click)="addCardToDeck(card)">Adicionar ao Deck</button>
+  </mat-card>
+</div>
+
+<button mat-button (click)="onNoClick()">Fechar</button>

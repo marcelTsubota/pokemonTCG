@@ -9,7 +9,8 @@ import { CardListService } from './services/card-list.service';
 })
 export class AppComponent {
   title = 'pokemontcg';
-  constructor(private cardListService: CardListService, private router: Router) {}
+  constructor(
+    private cardListService: CardListService, private router: Router) {}
 
   openCardList(): void {
     const cardList = this.cardListService.getAllCardLists();

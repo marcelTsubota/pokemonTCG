@@ -1,9 +1,14 @@
 <div class="placeholder-header"></div>
 
 <div class="header">
-    <button mat-raised-button color="primary" (click)="createNewList()" [disabled]="isCreateButtonDisabled()">
-        Criar Nova Lista
-    </button>
+    <button mat-raised-button color="primary" (click)="createNewList()" [disabled]="isCreateButtonDisabled()">Confirmar</button>
+    <button mat-raised-button color="primary" routerLink="/pokemon-list"> <div>Lista de decks</div> </button>
+    <div *ngIf="decks$ | async as decks">
+        <div *ngFor="let deck of decks">
+            <h3>Nome do deck: {{ deck.name }}</h3>
+            <button mat-raised-button color="primary" [routerLink]="['/deck-details', deck.id]">Abri deck</button>
+        </div>
+    </div>
     <div class="counter">
         {{ selectedCards.length }} / {{ minSelectedCards }}
         <ng-container *ngIf="selectedCards.length >= minSelectedCards">
