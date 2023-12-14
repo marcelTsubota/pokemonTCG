@@ -7,15 +7,4 @@ import { Component } from '@angular/core';
 })
 export class PokemonCardComponent {
 
-  /* @Input()
-  pokemon: string;
-
-  @Input()
-  numero: number; */
-
-  setImgPokemon() {
-    // const id = this.id;
-    return 'https://docs.pokemontcg.io/#api_v1cards_list'
-  }
-
 }

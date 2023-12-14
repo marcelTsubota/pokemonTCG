@@ -1,3 +1,27 @@
-<div *ngFor="let card of cards?.cards">
-    {{ card.name }}
-  </div>
+<div class="placeholder-header"></div>
+
+<div class="header">
+    <button mat-raised-button color="primary" (click)="createNewList()" [disabled]="isCreateButtonDisabled()">
+        Criar Nova Lista
+    </button>
+    <div class="counter">
+        {{ selectedCards.length }} / {{ minSelectedCards }}
+        <ng-container *ngIf="selectedCards.length >= minSelectedCards">
+            <mat-icon color="primary">check</mat-icon> Seleção Completa!
+        </ng-container>
+    </div>
+</div>
+
+<div class="flex flex-wrap shadow-md p-4">
+    <mat-card *ngFor="let card of cards?.cards"
+                [ngClass]="{'selected-card': isCardSelected(card), 'unselected-card': !isCardSelected(card)}"
+                class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2"
+                (click)="toggleCardSelection(card)">
+        <img [src]="card.imageUrl" alt="{{ card.name }} Image" class="w-full object-cover">
+        <mat-card-content> 
+            <mat-card-title class="text-lg font-bold">{{ card.name }}</mat-card-title>
+            <div class="text-base">Supertype: {{ card.supertype }}</div>
+            <div *ngFor="let cardType of card.types">Type: {{ cardType }}</div>
+        </mat-card-content>
+    </mat-card>
+</div>
