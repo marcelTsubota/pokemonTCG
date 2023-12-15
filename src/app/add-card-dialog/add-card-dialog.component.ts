@@ -5,6 +5,7 @@ import { Deck } from '../model/deck.model';
 import { DeckService } from '../services/deck.service';
 import { PokemonService } from '../services/pokemon.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add-card-dialog',
@@ -12,13 +13,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./add-card-dialog.component.scss'],
 })
 export class AddCardDialogComponent implements OnInit {
-  card: Card | undefined;
-  cards: any;
   deck: any;
+  cards: any;
+  loading = true;
   decks: Deck[] = [];
   allCards: any = []; 
-  availableCards: Card[] = [];
+  card: Card | undefined;
   selectedCards: Card[] = [];
+  availableCards: Card[] = [];
 
   constructor(
     private pokemonService: PokemonService,
@@ -30,24 +32,22 @@ export class AddCardDialogComponent implements OnInit {
     this.deck = this.data.deck;
   }
 
-  ngOnInit(): void {
-    this.getPokemonCards();
-    this.getAvailableCards();
-    this.loadDecks();
-  }
-
-  getPokemonCards(): void {
-    this.pokemonService.getCards().subscribe(data => {
-      this.allCards = data;
+  ngOnInit(): void  {
+    this.getPokemonCards().subscribe(cards => {
+      this.allCards = cards;
+      this.getAvailableCards();
     });
   }
 
+  getPokemonCards(): Observable<Card[]> {
+    return this.pokemonService.getCards();
+  }
+
   getAvailableCards(): void {
-    setTimeout(() => {
-      const deckCardsArray = this.deck.cards;
-      const allCardsArray = this.allCards.cards;
-      this.availableCards = allCardsArray.filter((card: Card) => !deckCardsArray.some((deckCard: Card) => card.id === deckCard.id));
-    }, 2000); 
+    const deckCardsArray = this.deck.cards;
+    const allCardsArray = this.allCards.cards;
+    this.availableCards = allCardsArray.filter((card: Card) => !deckCardsArray.some((deckCard: Card) => card.id === deckCard.id));
+    this.loading = false;
   }
 
   loadDecks(): void {

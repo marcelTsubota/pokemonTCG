@@ -8,8 +8,7 @@
     </mat-form-field>
     <div *ngIf="decks$ | async as decks" class="decks-container">
         <div *ngFor="let deck of decks">
-            <h4>{{ deck.name }}</h4>
-            <button mat-raised-button color="primary" [routerLink]="['/deck-details', deck.id]">Abri deck</button>
+            <button mat-raised-button color="primary" [routerLink]="['/deck-details', deck.id]">{{ deck.name }}</button>
         </div>
     </div>
     <div class="counter">
@@ -20,9 +19,9 @@
     </div>
 </div>
 
-<mat-form-field appearance="fill">
+<mat-form-field appearance="fill" class="custom-search-field">
     <mat-label>Pesquisar carta</mat-label>
-    <input matInput [(ngModel)]="searchTerm" placeholder="Digite o nome">
+    <input matInput [(ngModel)]="searchTerm" placeholder="Digite o nome" class="custom-search-input">
 </mat-form-field>
 
 <div class="flex flex-wrap shadow-md p-4">
@@ -37,8 +36,8 @@
             <button mat-icon-button color="primary" (click)="openCardDetailsModal(card)">
               <mat-icon>info</mat-icon>
             </button>
-            <button mat-icon-button color="primary" (click)="toggleCardSelection(card)">
-              <mat-icon>add</mat-icon>
+            <button mat-raised-button color="primary" (click)="toggleCardSelection(card)">
+                {{ cardStates[card.id] ? 'Remover' : 'Adicionar' }}
             </button>
           </div>
     </mat-card>

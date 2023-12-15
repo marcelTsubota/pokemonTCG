@@ -5,7 +5,7 @@
     left: 0;
     z-index: 1000;
     padding: 1rem;
-    background-color: white;
+    background-color: lightgrey;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,7 +30,7 @@
 }
 
 .selected-card {
-    border: 2px solid #4caf50; /* Cor da borda quando selecionado */
+  border: 4px solid rgb(74, 101, 175); /* ou a cor desejada */
     transition: transform 0.3s border 0.3s ease; /* Adiciona uma transição suave para a borda */
 }
 
@@ -69,4 +69,22 @@
   .button-container {
     display: flex;
     justify-content: space-between;
+  }
+
+  .custom-search-field {
+    width: 100%; /* Ou ajuste conforme necessário */
+  }
+  
+  .custom-search-input {
+    font-size: 16px; /* Ou o tamanho desejado */
+    border-radius: 8px; /* Adicione bordas arredondadas */
+    padding: 10px; /* Adicione espaço interno ao input */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adicione uma sombra suave */
+    transition: box-shadow 0.3s ease; /* Adicione uma transição para uma experiência mais suave */
+  
+    /* Exemplo de foco */
+    &:focus {
+      outline: none; /* Remova a borda de foco padrão */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aumente a sombra ao focar */
+    }
   }

@@ -23,8 +23,10 @@ export class PokemonListComponent implements OnInit {
   searchTerm: string = '';
   allCardsOrder: any = []; 
   selectedCards: Card[] = [];
+  isCardAdded: boolean = false;
   animationStates: { [key: string]: string } = {};
   decks$: Observable<Deck[]> = this.deckService.getDecks();
+  cardStates: { [key: string]: boolean } = {};
   
   constructor(
     private pokemonService: PokemonService,
@@ -61,21 +63,26 @@ export class PokemonListComponent implements OnInit {
         if (nameA > nameB) return 1;
         return 0;
       });
-      console.log('this.allCardsOrder', this.allCardsOrder);
     });
   }
 
-  toggleCardSelection(card: any) {
-    card.selected = !card.selected;
-    if (card.selected) {
+  toggleCardSelection(card: any): void {
+    this.cardStates[card.id] = !this.cardStates[card.id];
+  
+  
+  console.log('After toggle', this.cardStates, this.selectedCards);
+  
+  console.log('Toggle function called for card:', card);
+    if (this.cardStates[card.id]) {
       this.selectedCards.push(card);
     } else {
-      this.selectedCards = this.selectedCards.filter(selectedCard => selectedCard !== card);
+      this.selectedCards = this.selectedCards.filter(selectedCard => selectedCard.id !== card.id);
     }
+    console.log('After toggle', this.cardStates, this.selectedCards);
   }
 
   isCardSelected(card: any): boolean {
-    return card.selected || false;
+    return this.cardStates[card.id] || false;
   }
 
   isCreateButtonDisabled(): boolean {
@@ -84,17 +91,19 @@ export class PokemonListComponent implements OnInit {
 
   createNewList() {
     if (this.selectedCards.length >= 24 && this.selectedCards.length <= 60) {
-        this.saveDeck(this.selectedCards)
-          .subscribe(() => {
-            console.log('Nova lista criada:', this.selectedCards);
-            this.loadDecks();
-            this.selectedCards = [];
-            this.deckName = '';
-          });
-    } else {
-      console.log('Selecione entre 24 e 60 cartas.');
+      const cartasEscolhidas = this.selectedCards.filter(card => this.cardStates[card.id]);
+      this.saveDeck(cartasEscolhidas).subscribe(() => {
+        this.loadDecks();
+        this.selectedCards = [];
+        this.deckName = '';
+        this.resetCardStates();
+      });
     }
   }
+
+  resetCardStates(): void {
+    this.cardStates = {};
+}
   
   saveDeck(cartasEscolhidas: any): Observable<void> {
     const deck: Deck = {
@@ -117,12 +126,14 @@ export class PokemonListComponent implements OnInit {
   }
   
   openCardDetailsModal(card: any): void {
-    // this.selectedCard = card;
     const dialogRef = this.dialog.open(CardDetailsModalComponent, {
       data: card,
       width: '60vw',
     });
   }
 
+  toggleCardStatus(card: any): void {
+    this.cardStates[card.id] = !this.cardStates[card.id];
+  }
   
 }

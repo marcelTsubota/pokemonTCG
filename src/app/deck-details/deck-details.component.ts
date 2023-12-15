@@ -110,7 +110,6 @@ export class DeckDetailsComponent implements OnInit {
     if (this.deck) {
       this.deckService.deleteDeck(this.deck.id)
         .subscribe(() => {
-          console.log('Deck excluído!');
           this.router.navigate(['/pokemon-list']);
         });
     }
@@ -123,23 +122,17 @@ export class DeckDetailsComponent implements OnInit {
         this.snackBar.open('O baralho deve ter pelo menos 24 cartas.', 'OK', {
           duration: 3000
         })
-        console.log('O baralho deve ter pelo menos 24 cartas.');
         return;
       }
 
       this.deckService.deleteCardFromDeck(this.deck.id, cardId)
         .subscribe(() => {
-          console.log(`Carta ${cardId} excluída do deck!`);
           this.loadDeck();
         },
         error => {
           console.error('Erro ao excluir carta:', error);
         });
     }
-  }
-  
-  addCardToDeck() {
-    console.log('Carta adicionada ao deck!');
   }
 
   openDialog() {
@@ -175,7 +168,6 @@ export class DeckDetailsComponent implements OnInit {
         });
       }
     });
-    console.log(uniqueTypesSet);
     return uniqueTypesSet.size;
   }
 }
