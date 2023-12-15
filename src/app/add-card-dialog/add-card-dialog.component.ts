@@ -1,4 +1,5 @@
-import { Component, Inject, ElementRef, OnInit } from '@angular/core';
+import { Component, Inject, ElementRef, OnInit, Renderer2, AfterViewInit } from '@angular/core';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Card } from '../model/card.model';
 import { Deck } from '../model/deck.model';
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
   templateUrl: './add-card-dialog.component.html',
   styleUrls: ['./add-card-dialog.component.scss'],
 })
-export class AddCardDialogComponent implements OnInit {
+export class AddCardDialogComponent implements OnInit, AfterViewInit {
   deck: any;
   cards: any;
   loading = true;
@@ -26,6 +27,8 @@ export class AddCardDialogComponent implements OnInit {
     private pokemonService: PokemonService,
     private deckService: DeckService,
     private snackBar: MatSnackBar,
+    private renderer: Renderer2,
+    private el: ElementRef,
     public dialogRef: MatDialogRef<AddCardDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { deck: Deck }
   ) {
@@ -41,6 +44,13 @@ export class AddCardDialogComponent implements OnInit {
 
   getPokemonCards(): Observable<Card[]> {
     return this.pokemonService.getCards();
+  }
+
+  ngAfterViewInit(): void {
+    const overlayElement = this.el.nativeElement.querySelector('#cdk-overlay-0');
+    if (overlayElement) {
+      this.renderer.setStyle(overlayElement, 'overflow', 'auto !important');
+    }
   }
 
   getAvailableCards(): void {

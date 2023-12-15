@@ -1,12 +1,9 @@
 
 <div class="custom-modal-class">
   <div class="modal-header">
-    <button mat-icon-button color="warn" aria-label="Fechar" (click)="closeDialog()">
-      <mat-icon>close</mat-icon>
-    </button>
     <h2>Adicionar Carta ao Deck</h2>
   </div>
-  <div class="modal-content" style="overflow: auto !important;">
+  <div class="modal-content" style="height: 450px; overflow: auto !important;">
     <div *ngIf="loading" class="loading-indicator">Carregando...</div>
     <div *ngIf="!loading" class="flex flex-wrap shadow-md p-4" style="overflow: auto;">
       <mat-card *ngFor="let card of availableCards" class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2">
