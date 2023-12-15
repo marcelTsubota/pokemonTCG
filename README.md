@@ -26,10 +26,21 @@ O projeto segue uma arquitetura Angular 15 e faz uso de vários componentes, ser
 
 - **add-card-dialog:** Um componente para adicionar uma nova carta ao deck.
 
-## Development server
+## Testes Unitários
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Os testes unitários foram escritos usando a estrutura de teste Jasmine.
+Executar `ng test` para rodas os testes via [Karma](https://karma-runner.github.io).
 
-## Running unit tests
+## Server Desenvolvimento
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Executar `ng serve` e abrir no navegador `http://localhost:4200/`.
+
+# Angular CLI: 15.2.10
+
+# Node.js : v20.9.0
+
+# Package Manager: npm 10.1.0
+
+# OS: win32 x64
+
+# Visual Studio Code : Version: 1.85.1

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CardDetailsModalComponent } from './card-details-modal.component';
 
 describe('CardDetailsModalComponent', () => {
@@ -8,7 +8,10 @@ describe('CardDetailsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CardDetailsModalComponent ]
+      declarations: [ CardDetailsModalComponent ],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+      ],
     })
     .compileComponents();
 

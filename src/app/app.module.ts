@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { PokemonListComponent } from './pokemon-list/pokemon-list.component';
-import { PokemonCardComponent } from './pokemon-card/pokemon-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FormsModule } from '@angular/forms';
@@ -29,7 +28,6 @@ import { CardDetailsModalComponent } from './card-details-modal/card-details-mod
   declarations: [
     AppComponent,
     PokemonListComponent,
-    PokemonCardComponent,
     DeckDetailsComponent,
     LayoutComponent,
     AddCardDialogComponent,
@@ -50,7 +48,7 @@ import { CardDetailsModalComponent } from './card-details-modal/card-details-mod
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatDialogModule 
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

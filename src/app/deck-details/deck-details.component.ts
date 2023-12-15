@@ -6,7 +6,9 @@ import { Deck } from '../model/deck.model';
 import { DeckService } from '../services/deck.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs/operators';
 import { AddCardDialogComponent } from '../add-card-dialog/add-card-dialog.component';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -18,6 +20,7 @@ export class DeckDetailsComponent implements OnInit {
   @Input()
   deck: Deck | undefined;
   deckId: string | null = null;
+  private ngUnsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +35,8 @@ export class DeckDetailsComponent implements OnInit {
       switchMap(params => {
         this.deckId = params.get('id')!;
         return this.deckService.getDeckById(this.deckId);
-      })
+      }),
+      takeUntil(this.ngUnsubscribe$)
     ).subscribe(
       (deck: Deck | undefined) => {
         if (deck) {
@@ -45,6 +49,11 @@ export class DeckDetailsComponent implements OnInit {
         console.error('Erro ao carregar deck:', error);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe$.next();
+    this.ngUnsubscribe$.complete();
   }
 
   loadDeck(): void {
