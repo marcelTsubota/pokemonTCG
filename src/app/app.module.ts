@@ -19,7 +19,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CardListComponent } from './card-list/card-list.component';
 import { DeckDetailsComponent } from './deck-details/deck-details.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AddCardDialogComponent } from './add-card-dialog/add-card-dialog.component';
@@ -31,7 +30,6 @@ import { CardDetailsModalComponent } from './card-details-modal/card-details-mod
     AppComponent,
     PokemonListComponent,
     PokemonCardComponent,
-    CardListComponent,
     DeckDetailsComponent,
     LayoutComponent,
     AddCardDialogComponent,
