@@ -6,7 +6,7 @@
   </button>
 
   <button mat-raised-button color="primary" (click)="openDialog()" class="ml-2">
-    Mostrar lista de cartas
+    Adicionar cartas
   </button>
 
   <button mat-raised-button color="warn" (click)="deleteDeck()" class="ml-2">
@@ -14,10 +14,15 @@
   </button>
 </div>
 
+<div class="custom-stats-container">
+  <p class="stat-label">Quantidade de Pokémon: {{ getPokemonCount() }}</p>
+  <p class="stat-label">Quantidade de Treinadores: {{ getTrainerCount() }}</p>
+  <p class="stat-label">Quantidade de Cores: {{ getUniqueTypesCount() }}</p>
+</div><br><br>
 
 <div *ngIf="deck" class="deck-details-container">
-  <h2>Detalhes do Deck</h2>
-  <h3>{{ deck.name }}</h3>
+  <h1><b>{{ deck.name }}</b></h1>
+
 
   <div class="flex flex-wrap shadow-md p-4">
     <mat-card *ngFor="let cardId of deck.cards" class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2">

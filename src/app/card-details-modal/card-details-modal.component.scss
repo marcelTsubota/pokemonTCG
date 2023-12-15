@@ -1,0 +1,24 @@
+.modal-content {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+  }
+  
+  .card-details {
+    display: flex;
+  }
+  
+  .left-column {
+    flex: 1; /* Ocupa todo o espaço disponível */
+    margin-right: 16px; /* Adicione margem entre a imagem e as informações */
+  }
+  
+  .right-column {
+    flex: 2; /* Ocupa o dobro do espaço da coluna esquerda */
+  }
+  
+  .property {
+    padding: 8px; /* Adicione o padding conforme necessário */
+    column-count: 2; /* Define o número de colunas */
+    column-gap: 6px; /* Adicione o espaçamento entre as colunas */
+    font-size: 18px; /* Ajuste o tamanho da fonte conforme necessário */
+  }

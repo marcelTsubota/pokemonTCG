@@ -1,0 +1,52 @@
+<div class="modal-content">
+    <div class="card-details flex">
+      <div class="left-column">
+        <img [src]="card.imageUrlHiRes" alt="{{ card.name }} Image" class="w-full object-cover">
+      </div>
+  
+      <div class="right-column">
+        <h1><b>{{ card.name }}</b></h1>
+        <div class="property">HP: {{ card.hp }}</div>
+        <div class="property">Supertype: {{ card.supertype }}</div>
+        <!-- <div class="property">Types: {{ card.types?.join(', ') }}</div>
+        <div class="property">Series: {{ card.series }}</div> -->
+        <div class="property">
+            <div>Types: {{ card.types?.join(', ') }}</div>
+            <div>Series: {{ card.series }}</div>
+        </div>
+
+        <!-- Se houver ataques -->
+        <div *ngIf="card.attacks && card.attacks.length > 0" class="property">
+          <h3>Attacks:</h3>
+          <ul>
+            <li *ngFor="let attack of card.attacks">
+              {{ attack.name }} - Damage: {{ attack.damage }}
+            </li>
+          </ul>
+        </div>
+  
+        <!-- Se houver resistências -->
+        <div *ngIf="card.resistances && card.resistances.length > 0" class="property">
+          <h3>Resistances:</h3>
+          <ul>
+            <li *ngFor="let resistance of card.resistances">
+              {{ resistance.type }} - Value: {{ resistance.value }}
+            </li>
+          </ul>
+        </div>
+  
+        <!-- Se houver fraquezas -->
+        <div *ngIf="card.weaknesses && card.weaknesses.length > 0" class="property">
+          <h3>Weaknesses:</h3>
+          <ul>
+            <li *ngFor="let weakness of card.weaknesses">
+              {{ weakness.type }} - Value: {{ weakness.value }}
+            </li>
+          </ul>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  

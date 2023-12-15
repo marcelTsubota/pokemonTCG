@@ -18,14 +18,13 @@ export class DeckDetailsComponent implements OnInit {
   @Input()
   deck: Deck | undefined;
   deckId: string | null = null;
-  //snackBar: MatSnackBar;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private deckService: DeckService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
     ) {}
 
   ngOnInit() {
@@ -142,4 +141,32 @@ export class DeckDetailsComponent implements OnInit {
     });
   }
 
+  getCardCountBySupertype(supertype: string): number {
+    if (!this.deck) {
+      return 0;
+    }
+    return this.deck.cards.filter(card => card.supertype === supertype).length;
+  }
+
+  getPokemonCount(): number {
+    return this.getCardCountBySupertype('Pokémon');
+  }
+
+  getTrainerCount(): number {
+    return this.getCardCountBySupertype('Trainer');
+  }
+
+  getUniqueTypesCount(): number {
+    if (!this.deck) return 0;
+    const uniqueTypesSet = new Set<string>();
+    this.deck.cards.forEach(cardId => {
+      if (cardId.types) {
+        cardId.types.forEach((type: string) => {
+          uniqueTypesSet.add(type);
+        });
+      }
+    });
+    console.log(uniqueTypesSet);
+    return uniqueTypesSet.size;
+  }
 }

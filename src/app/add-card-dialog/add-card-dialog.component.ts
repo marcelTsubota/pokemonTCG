@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, ElementRef, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Card } from '../model/card.model';
 import { Deck } from '../model/deck.model';
 import { DeckService } from '../services/deck.service';
 import { PokemonService } from '../services/pokemon.service';
-import { filter, map } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-card-dialog',
@@ -18,39 +18,22 @@ export class AddCardDialogComponent implements OnInit {
   decks: Deck[] = [];
   allCards: any = []; 
   availableCards: Card[] = [];
+  selectedCards: Card[] = [];
 
   constructor(
     private pokemonService: PokemonService,
     private deckService: DeckService,
+    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AddCardDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { deck: Deck }
   ) {
     this.deck = this.data.deck;
   }
+
   ngOnInit(): void {
     this.getPokemonCards();
-    setTimeout(() => {
-      console.log("this.allcards", this.allCards);
-      console.log("this.deck", this.deck);
-      
-      const deckCardsArray = this.deck.cards;
-      const allCardsArray = this.allCards.cards;
-      console.log('allCardsArray', allCardsArray);
-      
-      //this.availableCards = allCardsArray.filter((card: { id: any; }) => !deckCardsArray.some((deckCard: { id: any; }) => card.id === deckCard.id));
-      this.availableCards = allCardsArray.filter((card: Card) => !deckCardsArray.some((deckCard: Card) => card.id === deckCard.id));
-
-
-      /* this.availableCards = Object.values(this.allCards).filter((card1: any) => {
-        console.log("card1", card1);
-        !Object.values(this.deck).some((card2: any) => {
-          console.log("card2", card2);
-          card1 === card2
-        });
-      }); */
-
-      console.log('this.availableCards', this.availableCards);
-      }, 5000);   
+    this.getAvailableCards();
+    this.loadDecks();
   }
 
   getPokemonCards(): void {
@@ -59,7 +42,16 @@ export class AddCardDialogComponent implements OnInit {
     });
   }
 
+  getAvailableCards(): void {
+    setTimeout(() => {
+      const deckCardsArray = this.deck.cards;
+      const allCardsArray = this.allCards.cards;
+      this.availableCards = allCardsArray.filter((card: Card) => !deckCardsArray.some((deckCard: Card) => card.id === deckCard.id));
+    }, 2000); 
+  }
+
   loadDecks(): void {
+    //const deckId = this.deck.id;
     this.deckService.getDecks().subscribe(
       decks => {
         this.decks = decks;
@@ -70,26 +62,34 @@ export class AddCardDialogComponent implements OnInit {
     );
   }
 
+  addCardToDeck(card: Card) {
+    if (this.deckService && this.deck) {
+      const deckId = this.deck.id;
+      this.deckService.addCardToDeck(deckId, card.id)
+      .subscribe(
+        () => {
+          this.deck.cards.push(card.id);
+          this.selectedCards = this.selectedCards.filter(selectedCard => selectedCard.id !== card.id);
+          this.snackBar.open(`Carta ${card.name} adicionada ao deck com sucesso!`, 'Fechar', {
+            duration: 3000,
+          });
+        }
+      );
+    } else {
+      console.error('Serviço do deck não disponível.');
+    }
+  }
+
+  addSelectedCardToDeck(card: Card): void {
+    this.dialogRef.close(card);
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  addCardToDeck(card: Card) {if (this.deckService) {
-    const deckId = 'ID_DO_SEU_DECK'; // Substitua pelo ID real do seu deck
-    this.deckService.addCardToDeck(deckId, card.id).subscribe(
-      () => {
-        console.log(`Carta ${card.name} adicionada ao deck!`);
-        // Adicione a lógica para atualizar o deck com a nova carta, se necessário
-        this.dialogRef.close(card);
-      },
-      error => {
-        console.error('Erro ao adicionar carta ao deck:', error);
-        // Adicione a lógica para lidar com erros, se necessário
-      }
-    );
-    } else {
-      console.error('Serviço do deck não disponível.');
-      // Adicione a lógica para lidar com a ausência do serviço, se necessário
-    }
-  }
 }

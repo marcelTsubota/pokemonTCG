@@ -1,0 +1,45 @@
+$color_1: #ffffff;
+$background-color_1: #fff;
+$background-color_2: #2196F3;
+$background-color_3: #ef5350;
+
+.modal {
+	display: flex;
+	flex-direction: column;
+	height: 70%;
+	max-height: 80vh;
+	background-color: $background-color_1;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	overflow: auto !important;
+}
+.modal-content {
+	padding: 20px;
+	overflow-y: auto;
+	flex-grow: 1;
+	overflow: auto !important;
+}
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: $background-color_2;
+	color: $color_1;
+	padding: 15px;
+	h2 {
+		margin: 0;
+	}
+}
+.modal-footer {
+	text-align: right;
+	padding: 15px;
+}
+button[mat-icon-button] {
+	outline: none;
+	&:hover {
+		background-color: $background-color_3;
+	}
+}
+mat-icon {
+	font-size: 24px;
+}

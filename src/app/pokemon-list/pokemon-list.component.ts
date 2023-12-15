@@ -1,8 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../services/pokemon.service';
 import { Deck } from '../model/deck.model';
 import { Card } from '../model/card.model';
 import { DeckService } from '../services/deck.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CardDetailsModalComponent } from '../card-details-modal/card-details-modal.component';
+
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,9 +15,13 @@ import { Observable } from 'rxjs';
 })
 export class PokemonListComponent implements OnInit {
   cards: any;
+  selectedCard: any;
   decks: Deck[] = [];
-  minSelectedCards = 4;
-  allCards: Card[] = []; 
+  allCards: any = [];
+  minSelectedCards = 24;
+  deckName: string = '';
+  searchTerm: string = '';
+  allCardsOrder: any = []; 
   selectedCards: Card[] = [];
   animationStates: { [key: string]: string } = {};
   decks$: Observable<Deck[]> = this.deckService.getDecks();
@@ -22,7 +29,7 @@ export class PokemonListComponent implements OnInit {
   constructor(
     private pokemonService: PokemonService,
     private deckService: DeckService,
-    private cdr: ChangeDetectorRef
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -32,7 +39,6 @@ export class PokemonListComponent implements OnInit {
   }
 
   loadDecks(): void {
-    //this.decks = this.deckService.getDecks();
     this.deckService.getDecks().subscribe(
       decks => {
         this.decks = decks;
@@ -47,11 +53,20 @@ export class PokemonListComponent implements OnInit {
     this.pokemonService.getCards().subscribe((data) => {
       this.cards = data;
       this.allCards = data;
+      this.allCardsOrder = this.allCards.cards;
+      this.allCardsOrder.sort((a: { name: string; }, b: { name: string; }) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      });
+      console.log('this.allCardsOrder', this.allCardsOrder);
     });
   }
 
   toggleCardSelection(card: any) {
-    card.selected = !card.selected; // Inverte o status de seleção
+    card.selected = !card.selected;
     if (card.selected) {
       this.selectedCards.push(card);
     } else {
@@ -60,32 +75,54 @@ export class PokemonListComponent implements OnInit {
   }
 
   isCardSelected(card: any): boolean {
-    return card.selected || false; // Retorna true se a carta está selecionada
+    return card.selected || false;
   }
 
   isCreateButtonDisabled(): boolean {
-    return this.selectedCards.length < this.minSelectedCards;
+    return !this.isCreateButtonEnabled() || this.deckName.length < 3;
   }
 
   createNewList() {
-    if (this.selectedCards.length >= 4 && this.selectedCards.length <= 60) {
-      this.saveDeck(this.selectedCards)
-        .subscribe(() => {
-          console.log('Nova lista criada:', this.selectedCards);
-          this.loadDecks();
-        });
+    if (this.selectedCards.length >= 24 && this.selectedCards.length <= 60) {
+        this.saveDeck(this.selectedCards)
+          .subscribe(() => {
+            console.log('Nova lista criada:', this.selectedCards);
+            this.loadDecks();
+            this.selectedCards = [];
+            this.deckName = '';
+          });
     } else {
-      console.log('Selecione entre 4 e 60 cartas.');
+      console.log('Selecione entre 24 e 60 cartas.');
     }
   }
   
   saveDeck(cartasEscolhidas: any): Observable<void> {
     const deck: Deck = {
       id: Date.now().toString(),
-      name: 'Meu Deck', // Pode personalizar o nome conforme necessário
-      cards: cartasEscolhidas, // Adicione a lógica para obter os IDs das cartas no deck
+      name: this.deckName,
+      cards: cartasEscolhidas,
     };
   
     return this.deckService.saveDeck(deck);
   }
+
+  isCreateButtonEnabled(): boolean {
+    return this.selectedCards.length >= 24 && this.selectedCards.length <= 60;
+  }
+
+  get filteredCards(): any[] {
+    return this.cards?.cards.filter((card: { name: string; }) =>
+      card.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    ) || [];
+  }
+  
+  openCardDetailsModal(card: any): void {
+    // this.selectedCard = card;
+    const dialogRef = this.dialog.open(CardDetailsModalComponent, {
+      data: card,
+      width: '60vw',
+    });
+  }
+
+  
 }

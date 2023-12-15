@@ -1,32 +1,45 @@
 <div class="placeholder-header"></div>
 
 <div class="header">
-    <button mat-raised-button color="primary" (click)="createNewList()" [disabled]="isCreateButtonDisabled()">Confirmar</button>
-    <button mat-raised-button color="primary" routerLink="/pokemon-list"> <div>Lista de decks</div> </button>
-    <div *ngIf="decks$ | async as decks">
+    <button mat-raised-button color="primary" (click)="createNewList()" [disabled]="isCreateButtonDisabled()" class="confirm">Salvar</button>
+    <mat-form-field *ngIf="isCreateButtonEnabled()">
+        <mat-label>Nome do Deck</mat-label>
+        <input matInput type="text" [(ngModel)]="deckName" required #deckNameInput />
+    </mat-form-field>
+    <div *ngIf="decks$ | async as decks" class="decks-container">
         <div *ngFor="let deck of decks">
-            <h3>Nome do deck: {{ deck.name }}</h3>
+            <h4>{{ deck.name }}</h4>
             <button mat-raised-button color="primary" [routerLink]="['/deck-details', deck.id]">Abri deck</button>
         </div>
     </div>
     <div class="counter">
-        {{ selectedCards.length }} / {{ minSelectedCards }}
+        <h4>Selecionadas / Qtde min : {{ selectedCards.length }} / {{ minSelectedCards }}</h4>
         <ng-container *ngIf="selectedCards.length >= minSelectedCards">
-            <mat-icon color="primary">check</mat-icon> Seleção Completa!
+            <mat-icon color="primary">check</mat-icon>
         </ng-container>
     </div>
 </div>
 
+<mat-form-field appearance="fill">
+    <mat-label>Pesquisar carta</mat-label>
+    <input matInput [(ngModel)]="searchTerm" placeholder="Digite o nome">
+</mat-form-field>
+
 <div class="flex flex-wrap shadow-md p-4">
-    <mat-card *ngFor="let card of cards?.cards"
-                [ngClass]="{'selected-card': isCardSelected(card), 'unselected-card': !isCardSelected(card)}"
-                class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2"
-                (click)="toggleCardSelection(card)">
+    <mat-card *ngFor="let card of filteredCards"
+              [ngClass]="{'selected-card': isCardSelected(card), 'unselected-card': !isCardSelected(card)}"
+              class="w-full mb-4 sm:w-1/6 md:w-1/8 lg:w-1/10 xl:w-1/10 p-2">
         <img [src]="card.imageUrl" alt="{{ card.name }} Image" class="w-full object-cover">
         <mat-card-content> 
             <mat-card-title class="text-lg font-bold">{{ card.name }}</mat-card-title>
-            <div class="text-base">Supertype: {{ card.supertype }}</div>
-            <div *ngFor="let cardType of card.types">Type: {{ cardType }}</div>
         </mat-card-content>
+        <div class="button-container">
+            <button mat-icon-button color="primary" (click)="openCardDetailsModal(card)">
+              <mat-icon>info</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="toggleCardSelection(card)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
     </mat-card>
 </div>
